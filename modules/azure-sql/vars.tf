@@ -55,3 +55,19 @@ variable "default_subnet_prefix" {
   description = "The address prefix to use for the default subnet."
   default     = "10.0.0.0/24"
 }
+
+variable "sql_subnet_prefix" {
+  type = "string"
+  description = "The address prefix to use for the SQL Managed Instance subnet."
+  default     = "10.0.1.0/24"
+}
+
+variable "skuEdition" {
+  type = "string"
+  default = "GP_Gen4"
+}
+
+variable "skuName" {
+  type = "string"
+  default = "GeneralPurpose"
+}
