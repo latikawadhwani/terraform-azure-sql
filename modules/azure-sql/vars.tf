@@ -18,31 +18,40 @@ variable "location" {
   default = "West US"
 }
 
-variable "sql_server_version" {
-  default = "12.0"
-}
-
-variable "create_mode" {
-  default = "Default"
-}
-
 variable "collation" {
   default = "SQL_Latin1_General_CP1_CI_AS"
 }
 
-variable "requested_service_objective_name" {
-  default = "S0"
+variable "storageSizeInGB" {
+  default = "256"
 }
 
-variable "edition" {
-  default = "Basic"
+variable "vCores" {
+  default = "8"
 }
 
-variable "start_ip_address" {
-  default = "0.0.0.0"
+variable "licenseType" {
+  default = "LicenseIncluded"
 }
 
-variable "end_ip_address" {
-  default = "0.0.0.0"
+variable "hardwareFamily" {
+  default = "Gen4"
 }
 
+variable "address_space" {
+  type = "string"
+  description = "The address space that is used by the virtual network."
+  default     = "10.0.0.0/16"
+}
+
+variable "dns_servers" {
+  type = "list"
+  description = "The DNS servers to be used by the virtual network"
+  default     = []
+}
+
+variable "default_subnet_prefix" {
+  type = "string"
+  description = "The address prefix to use for the default subnet."
+  default     = "10.0.0.0/24"
+}

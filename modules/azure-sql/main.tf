@@ -9,29 +9,39 @@ resource "azurerm_resource_group" "rg" {
   location = "${var.location}"
 }
 
-resource "azurerm_sql_server" "main" {
-  name                         = "mysqlserver"
-  resource_group_name          = "${azurerm_resource_group.rg.name}"
-  location                     = "${azurerm_resource_group.rg.location}"
-  version                      = "${var.sql_server_version}"
-  administrator_login          = "${var.administrator_login}"
-  administrator_login_password = "${var.administrator_login_password}" 
-}
+// # Create virtual network
+// resource "azurerm_virtual_network" "vnet" {
+//   name                = "myVirtualNetwork"
+//   location            = "${azurerm_resource_group.rg.location}"
+//   address_space       = "${var.address_space}"
+//   resource_group_name = "${azurerm_resource_group.rg.name}"
+// }
 
-resource "azurerm_sql_database" "main" {
-  name                             = "mysqldatabase"
-  resource_group_name              = "${azurerm_resource_group.rg.name}"
-  location                         = "${azurerm_resource_group.rg.location}"
-  server_name                      = "${azurerm_sql_server.main.name}"
-  edition                          = "${var.edition}"
-  requested_service_objective_name = "${var.requested_service_objective_name}"
-  create_mode                      = "${var.create_mode}"
-}
+// #Create subnet
+// resource "azurerm_subnet" "defaultsubnet" {
+//   name                 = "${var.default_subnet_name}"
+//   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+//   resource_group_name  = "${azurerm_resource_group.rg.name}"
+//   address_prefix       = "${var.default_subnet_prefix}"
+// }
 
-resource "azurerm_sql_firewall_rule" "main" {
-  name                = "AlllowAzureServices"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  server_name         = "${azurerm_sql_server.main.name}"
-  start_ip_address    = "${var.start_ip_address}"
-  end_ip_address      = "${var.end_ip_address}"
+resource "azurerm_template_deployment" "main" {
+      name                = "Manged-SQL-ARM"
+      resource_group_name = "${azurerm_resource_group.rg.name}"
+      template_body = "${file("../arm/azuredeploy.json")}"
+
+      parameters {
+        adminUser = "${var.administrator_login}"
+        adminPassword  = "${var.administrator_login_password}"
+        location = "${azurerm_resource_group.rg.location}"
+        storageSizeInGB = "${var.storageSizeInGB}"
+        vCores = "${var.vCores}"
+        collation = "${var.collation}"
+        skuName = "${var.skuName}"
+        skuEdition = "${var.skuEdition}"
+        licenseType = "${var.licenseType}"
+        hardwareFamily = "${var.hardwareFamily}"
+      }
+
+      deployment_mode = "Incremental"
 }

@@ -1,0 +1,74 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "managedInstanceName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "adminUser": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "subnetId": {
+            "type": "string"
+        },
+        "storageSizeInGB": {
+            "type" : "int",
+            "defaultValue": "256"
+        }, 
+        "vCores": {
+            "type": "int",
+            "defaultValue": "8"
+        },
+        "collation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "GP_Gen4"
+        },
+        "skuEdition": {
+            "type": "string",
+            "defaultValue": "GeneralPurpose"
+        },
+        "licenseType": {
+            "type": "string",
+            "defaultValue": "LicenseIncluded"
+        },
+        "hardwareFamily": {
+            "type": "string",
+            "defaultValue": "Gen4"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('managedInstanceName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "[parameters('skuEdition')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('adminUser')]",
+                "administratorLoginPassword": "[parameters('adminPassword')]",
+                "subnetId": "[parameters('subnetId')]",
+                "storageSizeInGB": "[parameters('storageSizeInGB')]",
+                "vCores": "[parameters('vCores')]",
+                "licenseType": "[parameters('licenseType')]",
+                "hardwareFamily": "[parameters('hardwareFamily')]",
+                "collation": "[parameters('collation')]"
+            },
+            "type": "Microsoft.Sql/managedInstances",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "apiVersion": "2015-05-01-preview"
+        }
+    ]
+}
